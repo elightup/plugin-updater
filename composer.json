@@ -1,0 +1,7 @@
+{
+	"name": "elightup/plugin-updater",
+	"type": "library",
+	"autoload": {
+		"psr-4": { "eLightUp\\PluginUpdater\\": ["src/"] }
+	}
+}
