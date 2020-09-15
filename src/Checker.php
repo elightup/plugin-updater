@@ -27,8 +27,6 @@ class Checker {
 			$response = $this->request();
 		}
 
-		vd( $response );
-
 		if ( false === $response ) {
 			return $data;
 		}
@@ -40,7 +38,7 @@ class Checker {
 			$data->response = [];
 		}
 
-		if ( isset( $response['data']['new_version'] ) && version_compare( $this->manager->plugin->Version, $response['data']['new_version'], '<' ) ) {
+		if ( isset( $response['data']->new_version ) && version_compare( $this->manager->plugin->Version, $response['data']->new_version, '<' ) ) {
 			$data->response[ $this->manager->slug ] = $response['data'];
 		}
 
@@ -73,7 +71,6 @@ class Checker {
 		] );
 
 		$response = wp_remote_retrieve_body( $request );
-		vd( $response );
 		return $response ? @unserialize( $response ) : false;
 	}
 }
