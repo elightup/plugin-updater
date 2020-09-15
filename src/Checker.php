@@ -4,6 +4,7 @@ namespace eLightUp\PluginUpdater;
 class Checker {
 	private $manager;
 	private $option;
+	private $response;
 
 	public function __construct( Manager $manager, Option $option ) {
 		$this->manager = $manager;
@@ -20,14 +21,8 @@ class Checker {
 	}
 
 	public function check_update( $data ) {
-		static $response = null;
-
-		// Make sure to send remote request once.
-		if ( null === $response ) {
-			$response = $this->request();
-		}
-
-		if ( false === $response ) {
+		$this->request();
+		if ( ! $this->response ) {
 			return $data;
 		}
 
@@ -38,12 +33,13 @@ class Checker {
 			$data->response = [];
 		}
 
-		if ( isset( $response['data']->new_version ) && version_compare( $this->manager->plugin->Version, $response['data']->new_version, '<' ) ) {
-			$data->response[ $this->manager->slug ] = $response['data'];
+		$update = $this->response['data'];
+		if ( isset( $update->new_version ) && version_compare( $this->manager->plugin->Version, $update->new_version, '<' ) ) {
+			$data->response[ $this->manager->slug ] = $update;
 		}
 
 		$this->option->update( [
-			'status' => $response['status'],
+			'status' => $this->response['status'],
 		] );
 
 		return $data;
@@ -54,12 +50,15 @@ class Checker {
 			return $data;
 		}
 
-		$response = $this->request();
-
-		return $response ? $response['data'] : $data;
+		$this->request();
+		return $this->response ? $this->response['data'] : $data;
 	}
 
 	public function request( $args = [] ) {
+		if ( null !== $this->response ) {
+			return;
+		}
+
 		$args = wp_parse_args( $args, [
 			'action'  => 'get_info',
 			'api_key' => $this->option->get_license_key(),
@@ -71,6 +70,6 @@ class Checker {
 		] );
 
 		$response = wp_remote_retrieve_body( $request );
-		return $response ? @unserialize( $response ) : false;
+		$this->response = $response ? @unserialize( $response ) : false;
 	}
 }
