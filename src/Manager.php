@@ -8,12 +8,14 @@ class Manager {
 	public $buy_url;
 	public $slug;
 	public $plugin;
+	public $parent_page;
 
     public function __construct( $args ) {
         $this->api_url        = $args['api_url'];
         $this->my_account_url = $args['my_account_url'];
         $this->buy_url        = $args['buy_url'];
         $this->slug           = $args['slug'];
+        $this->parent_page    = isset( $args['parent_page'] ) ? $args['parent_page'] : 'options-general.php';
 		$this->option_name    = $this->slug . '_license';
 
 		if( ! function_exists( 'get_plugin_data' ) ){

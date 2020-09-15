@@ -19,7 +19,7 @@ class Settings {
 	public function add_settings_page() {
 		$title = sprintf( __( '%s License', 'elightup' ), $this->manager->plugin->Name );
 		$page  = add_submenu_page(
-			'options-general.php',
+			$this->manager->parent_page,
 			$title,
 			$title,
 			'manage_options',

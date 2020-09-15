@@ -1,8 +1,6 @@
 <?php
 namespace eLightUp\PluginUpdater;
 
-use stdClass;
-
 class Checker {
 	private $manager;
 	private $option;
@@ -29,12 +27,14 @@ class Checker {
 			$response = $this->request();
 		}
 
+		vd( $response );
+
 		if ( false === $response ) {
 			return $data;
 		}
 
 		if ( empty( $data ) ) {
-			$data = new stdClass;
+			$data = new \stdClass;
 		}
 		if ( ! isset( $data->response ) ) {
 			$data->response = [];
@@ -73,6 +73,7 @@ class Checker {
 		] );
 
 		$response = wp_remote_retrieve_body( $request );
+		vd( $response );
 		return $response ? @unserialize( $response ) : false;
 	}
 }

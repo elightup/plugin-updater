@@ -11,7 +11,7 @@ class Notification {
 		$this->checker = $checker;
 		$this->option  = $option;
 
-		$this->settings_page = admin_url( 'options-general.php?page=' . $this->manager->slug . '-license' );
+		$this->settings_page = admin_url( "{$this->manager->parent_page}?page={$this->manager->slug}-license" );
 	}
 
 	public function setup() {
