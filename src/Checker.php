@@ -35,7 +35,10 @@ class Checker {
 
 		$update = $this->response['data'];
 		if ( isset( $update->new_version ) && version_compare( $this->manager->plugin->Version, $update->new_version, '<' ) ) {
-			$data->response[ $this->manager->slug ] = $update;
+			if ( empty( $update->package ) ) {
+				$update->upgrade_notice = __( 'UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates.', 'elightup' );
+			}
+			$data->response[ $update->plugin ] = $update;
 		}
 
 		$this->option->update( [
