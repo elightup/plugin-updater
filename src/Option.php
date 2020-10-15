@@ -14,11 +14,11 @@ class Option {
 	}
 
 	public function get_license_key() {
-		return $this->get( 'license_key' );
+		return $this->get( 'api_key' );
 	}
 
 	public function get_license_status() {
-		return $this->get_license_key() ? $this->get( 'license_status', 'active' ) : 'no_key';
+		return $this->get_license_key() ? $this->get( 'status', 'active' ) : 'no_key';
 	}
 
 	public function update( $option ) {

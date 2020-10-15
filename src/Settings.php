@@ -63,9 +63,9 @@ class Settings {
 								'active'  => __( 'Your license key is <b>active</b>.', 'elightup' ),
 							];
 							$status      = $this->option->get_license_status();
-							$license_key = in_array( $status, ['expired', 'active'], true ) ? '********************************' : $this->option->get( 'license_key' );
+							$license_key = in_array( $status, ['expired', 'active'], true ) ? '********************************' : $this->option->get_license_key();
 							?>
-							<input class="regular-text" name="data[license_key]" value="<?= esc_attr( $license_key ) ?>" type="password">
+							<input class="regular-text" name="data[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password">
 							<?php if ( isset( $messages[ $status ] ) ) : ?>
 								<p class="description"><?= wp_kses_post( sprintf( $messages[ $status ], $this->manager->buy_url, $this->manager->my_account_url ) ); ?></p>
 							<?php endif; ?>

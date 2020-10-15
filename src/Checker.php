@@ -74,5 +74,6 @@ class Checker {
 
 		$response = wp_remote_retrieve_body( $request );
 		$this->response = $response ? @unserialize( $response ) : false;
+		return $this->response;
 	}
 }
