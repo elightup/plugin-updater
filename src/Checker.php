@@ -73,7 +73,7 @@ class Checker {
 		] );
 
 		$response = wp_remote_retrieve_body( $request );
-		$this->response = $response ? @unserialize( $response ) : false;
+		$this->response = $response ? @unserialize( $response ) : null;
 		return $this->response;
 	}
 }
