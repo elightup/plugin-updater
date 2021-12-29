@@ -8,7 +8,7 @@ class Checker {
 
 	public function __construct( Manager $manager, Option $option ) {
 		$this->manager = $manager;
-		$this->option = $option;
+		$this->option  = $option;
 	}
 
 	public function setup() {
@@ -36,7 +36,7 @@ class Checker {
 		$update = $this->response['data'];
 		if ( isset( $update->new_version ) && version_compare( $this->manager->plugin->Version, $update->new_version, '<' ) ) {
 			if ( empty( $update->package ) ) {
-				$update->upgrade_notice = __( 'UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates.', 'elightup' );
+				$update->upgrade_notice = __( 'UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates.', 'elightup-plugin-updater' );
 			}
 			$data->response[ $update->plugin ] = $update;
 		}
@@ -72,7 +72,7 @@ class Checker {
 			'body' => $args,
 		] );
 
-		$response = wp_remote_retrieve_body( $request );
+		$response       = wp_remote_retrieve_body( $request );
 		$this->response = $response ? @unserialize( $response ) : null;
 		return $this->response;
 	}

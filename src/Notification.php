@@ -24,10 +24,14 @@ class Notification {
 
 	public function notify() {
 		$messages = array(
-			'no_key'  => __( 'You have not set a license key for %3$s yet, which means you are missing out on automatic updates and support! Please <a href="%1$s">enter your license key</a> or <a href="%2$s" target="_blank">get a new one here</a>.', 'ecar' ),
-			'invalid' => __( 'Your license key for %3$s is <b>invalid</b>. Please <a href="%1$s">update your license key</a> or <a href="%2$s" target="_blank">get a new one</a> to enable automatic updates.', 'ecar' ),
-			'error'   => __( 'Your license key for %3$s is <b>invalid</b>. Please <a href="%1$s">update your license key</a> or <a href="%2$s" target="_blank">get a new one</a> to enable automatic updates.', 'ecar' ),
-			'expired' => __( 'Your license key for %3$s is <b>expired</b>. Please renew your license to get automatic updates and premium support.', 'ecar' ),
+			// Translators: %1$s - URL to the settings page, %2$s - URL to the pricing page, %3$s - plugin name.
+			'no_key'  => __( 'You have not set a license key for %3$s yet, which means you are missing out on automatic updates and support! Please <a href="%1$s">enter your license key</a> or <a href="%2$s" target="_blank">get a new one here</a>.', 'elightup-plugin-updater' ),
+			// Translators: %1$s - URL to the settings page, %2$s - URL to the pricing page, %3$s - plugin name.
+			'invalid' => __( 'Your license key for %3$s is <b>invalid</b>. Please <a href="%1$s">update your license key</a> or <a href="%2$s" target="_blank">get a new one</a> to enable automatic updates.', 'elightup-plugin-updater' ),
+			// Translators: %1$s - URL to the settings page, %2$s - URL to the pricing page, %3$s - plugin name.
+			'error'   => __( 'Your license key for %3$s is <b>invalid</b>. Please <a href="%1$s">update your license key</a> or <a href="%2$s" target="_blank">get a new one</a> to enable automatic updates.', 'elightup-plugin-updater' ),
+			// Translators: %1$s - URL to the settings page, %2$s - URL to the pricing page, %3$s - plugin name.
+			'expired' => __( 'Your license key for %3$s is <b>expired</b>. Please renew your license to get automatic updates and premium support.', 'elightup-plugin-updater' ),
 		);
 		$status   = $this->option->get_license_status();
 		if ( ! isset( $messages[ $status ] ) ) {
