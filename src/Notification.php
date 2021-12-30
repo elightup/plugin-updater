@@ -4,21 +4,14 @@ namespace eLightUp\PluginUpdater;
 class Notification {
 	private $manager;
 	private $option;
-	private $settings_page;
 
 	public function __construct( Manager $manager, Checker $checker, Option $option ) {
 		$this->manager = $manager;
 		$this->checker = $checker;
 		$this->option  = $option;
-
-		$this->settings_page = admin_url( "{$this->manager->parent_page}?page={$this->manager->slug}-license" );
 	}
 
 	public function setup() {
-		add_action( 'init', [ $this, 'show_notifications' ] );
-	}
-
-	public function show_notifications() {
 		add_action( 'admin_notices', [ $this, 'notify' ] );
 	}
 
@@ -38,6 +31,6 @@ class Notification {
 			return;
 		}
 
-		echo '<div class="notice notice-warning is-dismissible"><p><span class="dashicons dashicons-warning" style="color: #f56e28"></span> ', wp_kses_post( sprintf( $messages[ $status ], $this->settings_page, $this->manager->buy_url, $this->manager->plugin->Name ) ), '</p></div>';
+		echo '<div class="notice notice-warning is-dismissible"><p><span class="dashicons dashicons-warning" style="color: #f56e28"></span> ', wp_kses_post( sprintf( $messages[ $status ], $this->manager->settings_page, $this->manager->buy_url, $this->manager->plugin->Name ) ), '</p></div>';
 	}
 }

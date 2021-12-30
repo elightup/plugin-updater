@@ -9,29 +9,36 @@ class Manager {
 	public $slug;
 	public $plugin;
 	public $parent_page;
+	public $settings_page;
+
+	public $option;
+	public $checker;
+	public $settings;
+	public $notification;
 
 	public function __construct( $args ) {
 		$this->api_url        = $args['api_url'];
 		$this->my_account_url = $args['my_account_url'];
 		$this->buy_url        = $args['buy_url'];
 		$this->slug           = $args['slug'];
-		$this->parent_page    = isset( $args['parent_page'] ) ? $args['parent_page'] : 'options-general.php';
+		$this->parent_page    = $args['parent_page'] ?? 'options-general.php';
 		$this->option_name    = $this->slug . '_license';
+		$this->settings_page  = $args['settings_page'] ?? admin_url( "{$this->parent_page}?page={$this->slug}-license" );
 
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		$this->plugin = (object) get_plugin_data( WP_PLUGIN_DIR . "/{$this->slug}/{$this->slug}.php" );
+
+		$this->option       = new Option( $this );
+		$this->checker      = new Checker( $this, $this->option );
+		$this->settings     = new Settings( $this, $this->checker, $this->option );
+		$this->notification = new Notification( $this, $this->checker, $this->option );
 	}
 
 	public function setup() {
-		$option       = new Option( $this );
-		$checker      = new Checker( $this, $option );
-		$settings     = new Settings( $this, $checker, $option );
-		$notification = new Notification( $this, $checker, $option );
-
-		$settings->setup();
-		$checker->setup();
-		$notification->setup();
+		$this->settings->setup();
+		$this->checker->setup();
+		$this->notification->setup();
 	}
 }
