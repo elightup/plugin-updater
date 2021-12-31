@@ -37,7 +37,7 @@ class Manager {
 		$this->option       = new Option( $this );
 		$this->checker      = new Checker( $this, $this->option );
 		$this->settings     = new Settings( $this, $this->checker, $this->option );
-		$this->notification = new Notification( $this, $this->checker, $this->option );
+		$this->notification = new Notification( $this, $this->option );
 	}
 
 	public function setup() {
