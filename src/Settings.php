@@ -58,23 +58,7 @@ class Settings {
 					<tr>
 						<th scope="row"><?php esc_html_e( 'License Key', 'elightup-plugin-updater' ); ?></th>
 						<td>
-							<?php
-							$messages    = [
-								// Translators: %1$s - URL to the buy page.
-								'invalid' => __( 'Your license key is <b>invalid</b>. Please update your license key or <a href="%1$s" target="_blank">get a new one here</a>.', 'elightup-plugin-updater' ),
-								// Translators: %1$s - URL to the buy page.
-								'error'   => __( 'Your license key is <b>invalid</b>. Please update your license key or <a href="%1$s" target="_blank">get a new one here</a>.', 'elightup-plugin-updater' ),
-								// Translators: %2$s - URL to the My Account page.
-								'expired' => __( 'Your license key is <b>expired</b>. Please <a href="%2$s" target="_blank">renew your license</a>.', 'elightup-plugin-updater' ),
-								'active'  => __( 'Your license key is <b>active</b>.', 'elightup-plugin-updater' ),
-							];
-							$status      = $this->option->get_license_status();
-							$license_key = in_array( $status, [ 'expired', 'active' ], true ) ? '********************************' : $this->option->get_license_key();
-							?>
-							<input class="regular-text" name="<?= esc_attr( $this->manager->option_name ) ?>[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password">
-							<?php if ( isset( $messages[ $status ] ) ) : ?>
-								<p class="description"><?= wp_kses_post( sprintf( $messages[ $status ], $this->manager->buy_url, $this->manager->my_account_url ) ); ?></p>
-							<?php endif; ?>
+							<?php $this->render_input() ?>
 						</td>
 					</tr>
 				</table>
@@ -82,6 +66,26 @@ class Settings {
 				<?php submit_button( __( 'Save Changes', 'elightup-plugin-updater' ) ); ?>
 			</form>
 		</div>
+		<?php
+	}
+
+	protected function render_input() {
+		$messages    = [
+			// Translators: %1$s - URL to the buy page.
+			'invalid' => __( 'Your license key is <b>invalid</b>. Please update your license key or <a href="%1$s" target="_blank">get a new one here</a>.', 'elightup-plugin-updater' ),
+			// Translators: %1$s - URL to the buy page.
+			'error'   => __( 'Your license key is <b>invalid</b>. Please update your license key or <a href="%1$s" target="_blank">get a new one here</a>.', 'elightup-plugin-updater' ),
+			// Translators: %2$s - URL to the My Account page.
+			'expired' => __( 'Your license key is <b>expired</b>. Please <a href="%2$s" target="_blank">renew your license</a>.', 'elightup-plugin-updater' ),
+			'active'  => __( 'Your license key is <b>active</b>.', 'elightup-plugin-updater' ),
+		];
+		$status      = $this->option->get_license_status();
+		$license_key = in_array( $status, [ 'expired', 'active' ], true ) ? '********************************' : $this->option->get_license_key();
+		?>
+		<input class="regular-text" name="<?= esc_attr( $this->manager->option_name ) ?>[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password">
+		<?php if ( isset( $messages[ $status ] ) ) : ?>
+			<p class="description"><?= wp_kses_post( sprintf( $messages[ $status ], $this->manager->buy_url, $this->manager->my_account_url ) ); ?></p>
+		<?php endif; ?>
 		<?php
 	}
 
