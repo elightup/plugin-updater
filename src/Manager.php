@@ -10,6 +10,7 @@ class Manager {
 	public $plugin;
 	public $parent_page;
 	public $settings_page;
+	public $settings_page_slug;
 
 	public $option;
 	public $checker;
@@ -21,9 +22,12 @@ class Manager {
 		$this->my_account_url = $args['my_account_url'];
 		$this->buy_url        = $args['buy_url'];
 		$this->slug           = $args['slug'];
-		$this->parent_page    = $args['parent_page'] ?? 'options-general.php';
 		$this->option_name    = $this->slug . '_license';
-		$this->settings_page  = $args['settings_page'] ?? admin_url( "{$this->parent_page}?page={$this->slug}-license" );
+
+		// Settings page.
+		$this->parent_page        = $args['parent_page'] ?? 'options-general.php';
+		$this->settings_page      = $args['settings_page'] ?? admin_url( "{$this->parent_page}?page={$this->slug}-license" );
+		$this->settings_page_slug = $args['settings_page_slug'] ?? "{$this->slug}-license";
 
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
