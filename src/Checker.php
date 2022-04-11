@@ -66,6 +66,7 @@ class Checker {
 			'action'  => 'get_info',
 			'api_key' => $this->option->get_license_key(),
 			'product' => $this->manager->slug,
+			'url'     => home_url(),
 		] );
 
 		$request = wp_remote_post( $this->manager->api_url, [
