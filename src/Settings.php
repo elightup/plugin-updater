@@ -80,7 +80,7 @@ class Settings {
 			'active'  => __( 'Your license key is <b>active</b>.', 'elightup-plugin-updater' ),
 		];
 		$status      = $this->option->get_license_status();
-		$license_key = in_array( $status, [ 'expired', 'active' ], true ) ? '********************************' : $this->option->get_license_key();
+		$license_key = $this->option->get_license_key();
 		?>
 		<input class="regular-text" name="<?= esc_attr( $this->manager->option_name ) ?>[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password">
 		<?php if ( isset( $messages[ $status ] ) ) : ?>
