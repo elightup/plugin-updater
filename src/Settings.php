@@ -36,17 +36,11 @@ class Settings {
 			<h1><?= esc_html( get_admin_page_title() ) ?></h1>
 			<p>
 				<?php
-				// Translators: %s - The plugin name.
-				echo esc_html( sprintf( __( 'Please enter your license key to enable automatic updates for %s.', 'elightup-plugin-updater' ), $this->manager->plugin->Name ) );
-				?>
-			</p>
-			<p>
-				<?php
 				printf(
-					// Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing page.
-					wp_kses_post( __( 'To get the license key, visit the <a href="%1$s" target="_blank">My Account</a> page. If you have not purchased any extension yet, please <a href="%2$s" target="_blank">get a new license here</a>.', 'elightup-plugin-updater' ) ),
+					// Translators: %1$s - URL to the My Account page, %2$s - The plugin name.
+					wp_kses_post( __( 'Please enter your <a href="%1$s">license key</a> to enable automatic updates for %2$s.', 'slim-seo' ) ),
 					esc_url( $this->manager->my_account_url ),
-					esc_url( $this->manager->buy_url )
+					$this->manager->plugin->Name
 				);
 				?>
 			</p>
@@ -72,12 +66,12 @@ class Settings {
 	protected function render_input() {
 		$messages    = [
 			// Translators: %1$s - URL to the buy page.
-			'invalid' => __( 'Your license key is <b>invalid</b>. Please update your license key or <a href="%1$s" target="_blank">get a new one here</a>.', 'elightup-plugin-updater' ),
+			'invalid' => __( 'Your license key is <b style="color: #d63638">invalid</b>.', 'elightup-plugin-updater' ),
 			// Translators: %1$s - URL to the buy page.
-			'error'   => __( 'Your license key is <b>invalid</b>. Please update your license key or <a href="%1$s" target="_blank">get a new one here</a>.', 'elightup-plugin-updater' ),
+			'error'   => __( 'Your license key is <b style="color: #d63638">invalid</b>.', 'elightup-plugin-updater' ),
 			// Translators: %2$s - URL to the My Account page.
-			'expired' => __( 'Your license key is <b>expired</b>. Please <a href="%2$s" target="_blank">renew your license</a>.', 'elightup-plugin-updater' ),
-			'active'  => __( 'Your license key is <b>active</b>.', 'elightup-plugin-updater' ),
+			'expired' => __( 'Your license key is <b style="color: #d63638">expired</b>. Please <a href="%2$s" target="_blank">renew your license</a>.', 'elightup-plugin-updater' ),
+			'active'  => __( 'Your license key is <b style="color: #00a32a">active</b>.', 'elightup-plugin-updater' ),
 		];
 		$status      = $this->option->get_license_status();
 		$license_key = $this->option->get_license_key();
@@ -102,9 +96,15 @@ class Settings {
 
 	public function save() {
 		// @codingStandardsIgnoreLine.
-		$option           = isset( $_POST[ $this->manager->option_name ] ) ? (array) $_POST[ $this->manager->option_name ] : [];
-		$option['status'] = 'active';
+		$option = isset( $_POST[ $this->manager->option_name ] ) ? (array) $_POST[ $this->manager->option_name ] : [];
 
+		// Do nothing if license key remains the same.
+		$prev_key = $this->option->get_license_key();
+		if ( isset( $option['api_key'] ) && $option['api_key'] === $prev_key ) {
+			return;
+		}
+
+		$option['status'] = 'active';
 		$args           = $option;
 		$args['action'] = 'check_license';
 		$response       = $this->checker->request( $args );
