@@ -38,7 +38,7 @@ class Settings {
 				<?php
 				printf(
 					// Translators: %1$s - URL to the My Account page, %2$s - The plugin name.
-					wp_kses_post( __( 'Please enter your <a href="%1$s">license key</a> to enable automatic updates for %2$s.', 'slim-seo' ) ),
+					wp_kses_post( __( 'Please enter your <a href="%1$s">license key</a> to enable automatic updates for %2$s.', 'elightup-plugin-updater' ) ),
 					esc_url( $this->manager->my_account_url ),
 					$this->manager->plugin->Name
 				);
