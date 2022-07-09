@@ -76,7 +76,7 @@ class Settings {
 		$status      = $this->option->get_license_status();
 		$license_key = $this->option->get_license_key();
 
-		if ( 'active' === $status ){
+		if ( 'active' === $status ) {
 			$license_key = "********************";
 		}
 		?>
