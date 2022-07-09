@@ -75,6 +75,10 @@ class Settings {
 		];
 		$status      = $this->option->get_license_status();
 		$license_key = $this->option->get_license_key();
+
+		if ( 'active' === $status ){
+			$license_key = "********************";
+		}
 		?>
 		<input class="regular-text" name="<?= esc_attr( $this->manager->option_name ) ?>[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password" autocomplete="autocomplete_off_randString">
 		<?php if ( isset( $messages[ $status ] ) ) : ?>
@@ -101,6 +105,9 @@ class Settings {
 		// Do nothing if license key remains the same.
 		$prev_key = $this->option->get_license_key();
 		if ( isset( $option['api_key'] ) && $option['api_key'] === $prev_key ) {
+			return;
+		}
+		if ( strpos( $option['api_key'], '*') !== false) {
 			return;
 		}
 
