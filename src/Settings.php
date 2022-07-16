@@ -5,7 +5,6 @@ class Settings {
 	protected $manager;
 	protected $option;
 	protected $checker;
-	protected $fake_api_key;
 
 	public function __construct( Manager $manager, Checker $checker, Option $option ) {
 		$this->manager = $manager;
