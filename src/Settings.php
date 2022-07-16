@@ -5,11 +5,13 @@ class Settings {
 	protected $manager;
 	protected $option;
 	protected $checker;
+	protected $fake_api_key;
 
 	public function __construct( Manager $manager, Checker $checker, Option $option ) {
 		$this->manager = $manager;
 		$this->checker = $checker;
 		$this->option  = $option;
+		$this->fake_api_key  = "****************";
 	}
 
 	public function setup() {
@@ -77,7 +79,7 @@ class Settings {
 		$license_key = $this->option->get_license_key();
 
 		if ( 'active' === $status ) {
-			$license_key = "********************";
+			$license_key = $this->fake_api_key;
 		}
 		?>
 		<input class="regular-text" name="<?= esc_attr( $this->manager->option_name ) ?>[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password" autocomplete="autocomplete_off_randString">
@@ -107,7 +109,7 @@ class Settings {
 		if ( isset( $option['api_key'] ) && $option['api_key'] === $prev_key ) {
 			return;
 		}
-		if ( strpos( $option['api_key'], '*') !== false) {
+		if ( $this->fake_api_key === $option['api_key'] ) {
 			return;
 		}
 
