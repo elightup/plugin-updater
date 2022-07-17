@@ -10,7 +10,7 @@ class Settings {
 		$this->manager = $manager;
 		$this->checker = $checker;
 		$this->option  = $option;
-		$this->fake_api_key  = "Please do not steal this license key";
+		$this->fake_api_key  = 'Please do not steal this license key';
 	}
 
 	public function setup() {
