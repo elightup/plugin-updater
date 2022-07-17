@@ -10,7 +10,7 @@ class Settings {
 		$this->manager = $manager;
 		$this->checker = $checker;
 		$this->option  = $option;
-		$this->please_dont_steal_this_license_key  = "****************";
+		$this->fake_api_key  = "please_dont_steal_this_license_key";
 	}
 
 	public function setup() {
@@ -78,7 +78,7 @@ class Settings {
 		$license_key = $this->option->get_license_key();
 
 		if ( 'active' === $status ) {
-			$license_key = $this->please_dont_steal_this_license_key;
+			$license_key = $this->fake_api_key;
 		}
 		?>
 		<input class="regular-text" name="<?= esc_attr( $this->manager->option_name ) ?>[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password" autocomplete="autocomplete_off_randString">
@@ -108,7 +108,7 @@ class Settings {
 		if ( isset( $option['api_key'] ) && $option['api_key'] === $prev_key ) {
 			return;
 		}
-		if ( $this->please_dont_steal_this_license_key === $option['api_key'] ) {
+		if ( $this->fake_api_key === $option['api_key'] ) {
 			return;
 		}
 
