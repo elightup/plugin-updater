@@ -5,12 +5,13 @@ class Settings {
 	protected $manager;
 	protected $option;
 	protected $checker;
+	protected $fake_api_key;
 
 	public function __construct( Manager $manager, Checker $checker, Option $option ) {
-		$this->manager = $manager;
-		$this->checker = $checker;
-		$this->option  = $option;
-		$this->fake_api_key  = 'Please do not steal this license key';
+		$this->manager      = $manager;
+		$this->checker      = $checker;
+		$this->option       = $option;
+		$this->fake_api_key = 'Please do not steal this license key';
 	}
 
 	public function setup() {
@@ -41,7 +42,7 @@ class Settings {
 					// Translators: %1$s - URL to the My Account page, %2$s - The plugin name.
 					wp_kses_post( __( 'Please enter your <a href="%1$s">license key</a> to enable automatic updates for %2$s.', 'elightup-plugin-updater' ) ),
 					esc_url( $this->manager->my_account_url ),
-					$this->manager->plugin->Name
+					esc_html( $this->manager->plugin->Name )
 				);
 				?>
 			</p>
@@ -75,11 +76,7 @@ class Settings {
 			'active'  => __( 'Your license key is <b style="color: #00a32a">active</b>.', 'elightup-plugin-updater' ),
 		];
 		$status      = $this->option->get_license_status();
-		$license_key = $this->option->get_license_key();
-
-		if ( 'active' === $status ) {
-			$license_key = $this->fake_api_key;
-		}
+		$license_key = 'active' === $status ? $this->fake_api_key : $this->option->get_license_key();
 		?>
 		<input class="regular-text" name="<?= esc_attr( $this->manager->option_name ) ?>[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password" autocomplete="autocomplete_off_randString">
 		<?php if ( isset( $messages[ $status ] ) ) : ?>
@@ -105,18 +102,15 @@ class Settings {
 
 		// Do nothing if license key remains the same.
 		$prev_key = $this->option->get_license_key();
-		if ( isset( $option['api_key'] ) && $option['api_key'] === $prev_key ) {
-			return;
-		}
-		if ( $this->fake_api_key === $option['api_key'] ) {
+		if ( isset( $option['api_key'] ) && in_array( $option['api_key'], [ $prev_key, $this->fake_api_key ], true ) ) {
 			return;
 		}
 
 		$option['status'] = 'active';
-		$args           = $option;
-		$args['action'] = 'check_license';
-		$response       = $this->checker->request( $args );
-		$status         = isset( $response['status'] ) ? $response['status'] : 'invalid';
+		$args             = $option;
+		$args['action']   = 'check_license';
+		$response         = $this->checker->request( $args );
+		$status           = isset( $response['status'] ) ? $response['status'] : 'invalid';
 
 		if ( false === $response ) {
 			add_settings_error( '', 'epu-error', __( 'Something wrong with the connection. Please try again later.', 'elightup-plugin-updater' ) );
