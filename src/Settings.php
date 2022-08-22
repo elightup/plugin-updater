@@ -76,7 +76,7 @@ class Settings {
 			'active'  => __( 'Your license key is <b style="color: #00a32a">active</b>.', 'elightup-plugin-updater' ),
 		];
 		$status      = $this->option->get_license_status();
-		$license_key = 'active' === $status ? $this->fake_api_key : $this->option->get_license_key();
+		$license_key = 'active' === $status || $this->option->get_license_key_constant() ? $this->fake_api_key : $this->option->get_license_key();
 		?>
 		<input class="regular-text" name="<?= esc_attr( $this->manager->option_name ) ?>[api_key]" value="<?= esc_attr( $license_key ) ?>" type="password" autocomplete="autocomplete_off_randString">
 		<?php if ( isset( $messages[ $status ] ) ) : ?>
@@ -100,8 +100,13 @@ class Settings {
 		// @codingStandardsIgnoreLine.
 		$option = isset( $_POST[ $this->manager->option_name ] ) ? (array) $_POST[ $this->manager->option_name ] : [];
 
+		// Prefer user-defined license key via a constant.
+		if ( $this->option->get_license_key_constant() ) {
+			$option['api_key'] = $this->option->get_license_key_constant();
+		}
+
 		// Do nothing if license key remains the same.
-		$prev_key = $this->option->get_license_key();
+		$prev_key = $this->option->get_license_key_constant() ? '' : $this->option->get_license_key();
 		if ( isset( $option['api_key'] ) && in_array( $option['api_key'], [ $prev_key, $this->fake_api_key ], true ) ) {
 			return;
 		}
@@ -131,6 +136,12 @@ class Settings {
 		}
 
 		$option['status'] = $status;
+
+		// Don't save user-defined license key via a constant in the database.
+		if ( $this->option->get_license_key_constant() ) {
+			unset( $option['api_key'] );
+		}
+
 		$this->option->update( $option );
 	}
 }

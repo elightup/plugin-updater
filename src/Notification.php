@@ -11,11 +11,14 @@ class Notification {
 	}
 
 	public function setup() {
-		add_action( 'admin_notices', [ $this, 'notify' ] );
-
 		$file = "{$this->manager->slug}/{$this->manager->slug}.php";
 		add_action( "in_plugin_update_message-$file", [ $this, 'show_update_message' ], 10, 2 );
 		add_filter( "plugin_action_links_$file", [ $this, 'plugin_links' ], 20 );
+
+		// Only show admin notice if license key is not defined via a constant.
+		if ( ! $this->option->get_license_key_constant() ) {
+			add_action( 'admin_notices', [ $this, 'notify' ] );
+		}
 	}
 
 	/**

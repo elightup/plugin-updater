@@ -14,7 +14,12 @@ class Option {
 	}
 
 	public function get_license_key() {
-		return $this->get( 'api_key' );
+		return $this->get_license_key_constant() ?? $this->get( 'api_key' );
+	}
+
+	public function get_license_key_constant() {
+		$const = strtoupper( str_replace( '-', '_', $this->manager->slug ) ) . '_KEY';
+		return defined( $const ) ? constant( $const ) : null;
 	}
 
 	public function get_license_status() {
