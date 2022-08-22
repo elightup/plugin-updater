@@ -59,7 +59,7 @@ class Checker {
 
 	public function request( $args = [] ) {
 		if ( null !== $this->response ) {
-			return;
+			return $this->response;
 		}
 
 		$args = wp_parse_args( $args, [
@@ -69,12 +69,24 @@ class Checker {
 			'url'     => home_url(),
 		] );
 
+		// Get from cache first.
+		$cache_key = 'elightup_' . md5( serialize( $args ) );
+		$cache     = get_transient( $cache_key );
+		if ( $cache ) {
+			$this->response = $cache;
+			return $this->response;
+		}
+
 		$request = wp_remote_post( $this->manager->api_url, [
 			'body' => $args,
 		] );
 
 		$response       = wp_remote_retrieve_body( $request );
 		$this->response = $response ? @unserialize( $response ) : null;
+
+		// Cache requests.
+		set_transient( $cache_key, $this->response, DAY_IN_SECONDS );
+
 		return $this->response;
 	}
 }
