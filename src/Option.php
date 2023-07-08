@@ -8,13 +8,13 @@ class Option {
 		$this->manager = $manager;
 	}
 
-	public function get( $name, $default = '' ) {
+	public function get( string $name, $fallback = '' ) {
 		$option = get_option( $this->manager->option_name, [] );
-		return $option[ $name ] ?? $default;
+		return $option[ $name ] ?? $fallback;
 	}
 
 	public function get_license_key(): string {
-		return $this->get_license_key_constant() ?? $this->get( 'api_key' );
+		return $this->get_license_key_constant() ?: $this->get( 'api_key' );
 	}
 
 	public function get_license_key_constant(): string {
