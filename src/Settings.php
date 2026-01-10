@@ -68,12 +68,13 @@ class Settings {
 	protected function render_input() {
 		$messages    = [
 			// Translators: %1$s - URL to the buy page.
-			'invalid' => __( 'Your license key is <b style="color: #d63638">invalid</b>.', 'elightup-plugin-updater' ),
+			'invalid'  => __( 'Your license key is <b style="color: #d63638">invalid</b>.', 'elightup-plugin-updater' ),
 			// Translators: %1$s - URL to the buy page.
-			'error'   => __( 'Your license key is <b style="color: #d63638">invalid</b>.', 'elightup-plugin-updater' ),
+			'error'    => __( 'Your license key is <b style="color: #d63638">invalid</b>.', 'elightup-plugin-updater' ),
 			// Translators: %2$s - URL to the My Account page.
-			'expired' => __( 'Your license key is <b style="color: #d63638">expired</b>. Please <a href="%2$s" target="_blank">renew your license</a>.', 'elightup-plugin-updater' ),
-			'active'  => __( 'Your license key is <b style="color: #00a32a">active</b>.', 'elightup-plugin-updater' ),
+			'expired'  => __( 'Your license key is <b style="color: #d63638">expired</b>. Please <a href="%2$s" target="_blank">renew your license</a>.', 'elightup-plugin-updater' ),
+			'active'   => __( 'Your license key is <b style="color: #00a32a">active</b>.', 'elightup-plugin-updater' ),
+			'refunded' => __( 'Your license has been <b style="color: #d63638">refunded</b>.', 'elightup-plugin-updater' ),
 		];
 		$status      = $this->option->get_license_status();
 		$license_key = 'active' === $status || $this->option->get_license_key_constant() ? $this->fake_api_key : $this->option->get_license_key();
